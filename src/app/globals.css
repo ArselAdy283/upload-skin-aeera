@@ -22,5 +22,20 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.bg-hero {
+  background-image: url('/banner.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.font-minecraft {
+  font-family: var(--font-minecraft-bold);
+}
+
+.font-montserrat {
+  font-family: var(--font-montserrat);
 }
