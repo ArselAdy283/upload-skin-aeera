@@ -24,7 +24,7 @@ const KumpulanSkin = () => {
             .then((res) => setData(res));
     }, []);
 
-  
+
     useEffect(() => {
         if (data.length === 0) return;
 
@@ -49,7 +49,7 @@ const KumpulanSkin = () => {
             viewer.camera.position.set(30.5, 22, 42);
 
             for (const user of data) {
-        
+
                 if (user.skins["Baju Sekolah"]) {
                     await viewer.loadSkin(user.skins["Baju Sekolah"]);
                     viewer.render();
@@ -57,6 +57,7 @@ const KumpulanSkin = () => {
                     sekolah.push({
                         nickname: user.nickname,
                         image: viewer.canvas.toDataURL("image/png"),
+                        original: user.skins["Baju Sekolah"],
                     });
                 }
 
@@ -67,6 +68,7 @@ const KumpulanSkin = () => {
                     pribadi.push({
                         nickname: user.nickname,
                         image: viewer.canvas.toDataURL("image/png"),
+                        original: user.skins["Baju Pribadi"],
                     });
                 }
             }
@@ -95,11 +97,14 @@ const KumpulanSkin = () => {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     {sekolahImages.map((item) => (
-                        <Link href={`/skin/bajusekolah/${item.nickname}_BajuSekolah.png`}
+                        <Link
+                            href={item.original}
                             key={item.nickname}
+                            target="_blank"
                             className="bg-slate-900 border border-white/10 rounded-2xl p-5 text-center hover:scale-105 transition"
                         >
                             <img src={item.image} className="mx-auto rounded-lg" />
+
                             <div className="flex gap-5 justify-center">
                                 <Image
                                     src={`https://crafthead.net/helm/${item.nickname}`}
@@ -110,7 +115,6 @@ const KumpulanSkin = () => {
                                 />
                                 <h1 className="mt-3 font-semibold">{item.nickname}</h1>
                             </div>
-
                         </Link>
                     ))}
                 </div>
@@ -128,8 +132,10 @@ const KumpulanSkin = () => {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     {pribadiImages.map((item) => (
-                        <Link href={`/skin/bajupribadi/${item.nickname}_BajuPribadi.png`}
+                        <Link
+                            href={item.original}
                             key={item.nickname}
+                            target="_blank"
                             className="bg-slate-900 border border-white/10 rounded-2xl p-5 text-center hover:scale-105 transition"
                         >
                             <img src={item.image} className="mx-auto rounded-lg" />
@@ -148,7 +154,6 @@ const KumpulanSkin = () => {
                     ))}
                 </div>
             )}
-
         </div>
     );
 };

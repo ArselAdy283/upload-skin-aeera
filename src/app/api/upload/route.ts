@@ -31,6 +31,7 @@ export async function POST(req: Request) {
                         folder: "skins",
                         public_id: `${safeNickname}_${safeJenis}`,
                         resource_type: "image",
+                        format: "png"
                     },
                     (error: any, result: any) => {
                         if (error) reject(error);

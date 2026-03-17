@@ -14,7 +14,7 @@ export default function HomePage() {
 
   useEffect(() => {
     if (nickname.trim().length > 0) {
-     
+
       setAvatarUrl(`https://crafthead.net/helm/${nickname}`);
     } else {
       setAvatarUrl("https://crafthead.net/helm/steve");
@@ -54,14 +54,28 @@ export default function HomePage() {
       body: formData,
     });
 
-    const data = await res.json();
-
-    if (data.success) {
-      alert("Upload berhasil!");
-      window.location.reload();
-    } else {
-      alert("Upload gagal");
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      alert("Server error (bukan JSON)");
+      return;
     }
+
+    if (!res.ok) {
+      console.error(data);
+      alert("Upload gagal: " + (data?.error || "unknown"));
+      return;
+    }
+
+    // ✅ SUCCESS
+    alert("Upload berhasil!");
+
+    // 🔥 tampilkan hasil cloudinary langsung
+    setPreview(data.path);
+
+    // optional reset
+    setNickname("");
   };
 
   const handleDrop = (e: any) => {
@@ -171,7 +185,7 @@ export default function HomePage() {
           </form>
         </div>
       </section>
-      <KumpulanSkin/>
+      <KumpulanSkin />
 
       <Footer />
     </main>

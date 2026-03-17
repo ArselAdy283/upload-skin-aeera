@@ -1,26 +1,23 @@
 import { db } from "@/db";
 import { skins } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
-    const { searchParams } = new URL(req.url);
-    const nick = searchParams.get("nick");
+  const { searchParams } = new URL(req.url);
+  const nick = searchParams.get("nick");
 
-    if (!nick) {
-        return Response.json({ error: "Nickname wajib" }, { status: 400 });
-    }
+  if (!nick) {
+    return NextResponse.json({ error: "Nickname wajib" }, { status: 400 });
+  }
 
-    const data = await db
-        .select()
-        .from(skins)
-        .where(eq(skins.nickname, nick));
+  const data = await db.select().from(skins).where(eq(skins.nickname, nick));
 
-    const result: any = {};
+  const result: Record<string, string> = {};
+  for (const item of data) {
+    if (!item.nickname || !item.jenis_skin || !item.skin) continue;
+    result[item.jenis_skin] = item.skin;
+  }
 
-    for (const item of data) {
-        if (!item.nickname || !item.jenis_skin || !item.skin) continue;
-        result[item.jenis_skin] = item.skin;
-    }
-
-    return Response.json(result);
+  return NextResponse.json(result);
 }

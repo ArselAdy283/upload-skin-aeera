@@ -3,23 +3,31 @@ import { skins } from "@/db/schema";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const data = await db.select().from(skins);
+  try {
+    const data = await db.select().from(skins);
 
-  // 🔥 Group berdasarkan nickname
-  const grouped: any = {};
+    const grouped: any = {};
 
-  data.forEach((item) => {
-    if (!item.nickname || !item.jenis_skin) return;
+    data.forEach((item) => {
+      if (!item.nickname || !item.jenis_skin) return;
 
-    if (!grouped[item.nickname]) {
-      grouped[item.nickname] = {
-        nickname: item.nickname,
-        skins: {},
-      };
-    }
+      if (!grouped[item.nickname]) {
+        grouped[item.nickname] = {
+          nickname: item.nickname,
+          skins: {},
+        };
+      }
 
-    grouped[item.nickname].skins[item.jenis_skin] = item.skin;
-  });
+      grouped[item.nickname].skins[item.jenis_skin] = item.skin;
+    });
 
-  return NextResponse.json(Object.values(grouped));
+    return NextResponse.json(Object.values(grouped));
+
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json(
+      { error: "Gagal ambil data" },
+      { status: 500 }
+    );
+  }
 }
