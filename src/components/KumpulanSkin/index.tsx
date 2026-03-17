@@ -13,8 +13,13 @@ type SkinData = {
     };
 };
 
-const KumpulanSkin = () => {
+const KumpulanSkin = ({ refreshKey }: { refreshKey: number }) => {
     const [data, setData] = useState<SkinData[]>([]);
+    useEffect(() => {
+        fetch("/api/skins")
+            .then((res) => res.json())
+            .then((res) => setData(res));
+    }, [refreshKey]); 
     const [sekolahImages, setSekolahImages] = useState<any[]>([]);
     const [pribadiImages, setPribadiImages] = useState<any[]>([]);
 

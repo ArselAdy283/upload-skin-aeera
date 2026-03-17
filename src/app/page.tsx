@@ -8,6 +8,7 @@ import KumpulanSkin from "@/components/KumpulanSkin";
 
 export default function HomePage() {
   const [nickname, setNickname] = useState("");
+  const [refreshKey, setRefreshKey] = useState(0);
   const [jenis, setJenis] = useState("Baju Pribadi");
   const [preview, setPreview] = useState<string | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<string>("https://crafthead.net/avatar/steve");
@@ -68,14 +69,13 @@ export default function HomePage() {
       return;
     }
 
-    // ✅ SUCCESS
+  // berhasil
     alert("Upload berhasil!");
-
-    // 🔥 tampilkan hasil cloudinary langsung
     setPreview(data.path);
 
     // optional reset
     setNickname("");
+    setRefreshKey(prev => prev + 1);
   };
 
   const handleDrop = (e: any) => {
@@ -185,7 +185,7 @@ export default function HomePage() {
           </form>
         </div>
       </section>
-      <KumpulanSkin />
+      <KumpulanSkin refreshKey={refreshKey} />
 
       <Footer />
     </main>
