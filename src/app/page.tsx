@@ -159,7 +159,7 @@ export default function HomePage() {
             {/* lengan */}
             <label className="block text-sm font-medium text-slate-400 mb-2">jenis lengan</label>
             <select
-              onChange={(e) => setJenis(e.target.value)}
+              onChange={(e) => setLengan(e.target.value)}
               className="w-full bg-slate-950 border border-white/10 rounded-xl py-3 pl-4 pr-4"
             >
               <option value="classic">Classic (Steve)</option>
