@@ -8,8 +8,14 @@ import { SkinViewer } from "skinview3d";
 type SkinData = {
     nickname: string;
     skins: {
-        ["Baju Pribadi"]?: string;
-        ["Baju Sekolah"]?: string;
+        ["Baju Pribadi"]?: {
+            skin: string;
+            lengan: string;
+        };
+        ["Baju Sekolah"]?: {
+            skin: string;
+            lengan: string;
+        };
     };
 };
 
@@ -19,16 +25,9 @@ const KumpulanSkin = ({ refreshKey }: { refreshKey: number }) => {
         fetch("/api/skins")
             .then((res) => res.json())
             .then((res) => setData(res));
-    }, [refreshKey]); 
+    }, [refreshKey]);
     const [sekolahImages, setSekolahImages] = useState<any[]>([]);
     const [pribadiImages, setPribadiImages] = useState<any[]>([]);
-
-    useEffect(() => {
-        fetch("/api/skins")
-            .then((res) => res.json())
-            .then((res) => setData(res));
-    }, []);
-
 
     useEffect(() => {
         if (data.length === 0) return;
@@ -55,26 +54,40 @@ const KumpulanSkin = ({ refreshKey }: { refreshKey: number }) => {
 
             for (const user of data) {
 
-                if (user.skins["Baju Sekolah"]) {
-                    await viewer.loadSkin(user.skins["Baju Sekolah"]);
-                    viewer.render();
+                if (user.skins["Baju Pribadi"]) {
+                    const url = user.skins["Baju Pribadi"]?.skin;
 
-                    sekolah.push({
-                        nickname: user.nickname,
-                        image: viewer.canvas.toDataURL("image/png"),
-                        original: user.skins["Baju Sekolah"],
-                    });
+                    try {
+                        await viewer.loadSkin(url);
+
+                        viewer.render();
+
+                        pribadi.push({
+                            nickname: user.nickname,
+                            image: viewer.canvas.toDataURL("image/png"),
+                            original: url,
+                        });
+                    } catch (e) {
+                        console.error("ERROR SEKOLAH:", user.nickname, e);
+                    }
                 }
 
-                if (user.skins["Baju Pribadi"]) {
-                    await viewer.loadSkin(user.skins["Baju Pribadi"]);
-                    viewer.render();
+                if (user.skins["Baju Sekolah"]) {
+                    const url = user.skins["Baju Sekolah"]?.skin;
 
-                    pribadi.push({
-                        nickname: user.nickname,
-                        image: viewer.canvas.toDataURL("image/png"),
-                        original: user.skins["Baju Pribadi"],
-                    });
+                    try {
+                       await viewer.loadSkin(url);
+
+                        viewer.render();
+
+                        sekolah.push({
+                            nickname: user.nickname,
+                            image: viewer.canvas.toDataURL("image/png"),
+                            original: url,
+                        });
+                    } catch (e) {
+                        console.error("ERROR SEKOLAH:", user.nickname, e);
+                    }
                 }
             }
 
@@ -100,7 +113,7 @@ const KumpulanSkin = ({ refreshKey }: { refreshKey: number }) => {
                     Skin masih kosong
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     {sekolahImages.map((item) => (
                         <Link
                             href={item.original}
@@ -110,15 +123,15 @@ const KumpulanSkin = ({ refreshKey }: { refreshKey: number }) => {
                         >
                             <img src={item.image} className="mx-auto rounded-lg" />
 
-                            <div className="flex gap-5 justify-center">
+                            <div className="flex gap-2 md:gap-5 justify-center">
                                 <Image
                                     src={`https://crafthead.net/helm/${item.nickname}`}
                                     alt={item.nickname}
                                     width={40}
                                     height={40}
-                                    className="w-10 h-10"
+                                    className="w-5 h-5 md:w-10 md:h-10"
                                 />
-                                <h1 className="mt-3 font-semibold">{item.nickname}</h1>
+                                <h1 className="md:mt-3 font-semibold text-sm md:text-xl">{item.nickname}</h1>
                             </div>
                         </Link>
                     ))}
@@ -135,7 +148,7 @@ const KumpulanSkin = ({ refreshKey }: { refreshKey: number }) => {
                     Skin masih kosong
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     {pribadiImages.map((item) => (
                         <Link
                             href={item.original}
@@ -145,15 +158,15 @@ const KumpulanSkin = ({ refreshKey }: { refreshKey: number }) => {
                         >
                             <img src={item.image} className="mx-auto rounded-lg" />
 
-                            <div className="flex gap-5 justify-center">
+                            <div className="flex gap-2 md:gap-5 justify-center">
                                 <Image
                                     src={`https://crafthead.net/helm/${item.nickname}`}
                                     alt={item.nickname}
                                     width={40}
                                     height={40}
-                                    className="w-10 h-10"
+                                    className="w-5 h-5 md:w-10 md:h-10"
                                 />
-                                <h1 className="mt-3 font-semibold">{item.nickname}</h1>
+                                <h1 className="md:mt-3 font-semibold text-sm md:text-xl">{item.nickname}</h1>
                             </div>
                         </Link>
                     ))}
