@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "ac1b5c58-ac59-41c5-9492-c6872d857716",
+  "id": "ce3f13fc-b2b5-4f19-a9fc-7db06061b82b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "skins": {
@@ -30,6 +30,13 @@
         },
         "skin": {
           "name": "skin",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "lengan": {
+          "name": "lengan",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false,

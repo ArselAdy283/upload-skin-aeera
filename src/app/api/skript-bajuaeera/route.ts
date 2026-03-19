@@ -13,10 +13,15 @@ export async function GET(req: Request) {
 
   const data = await db.select().from(skins).where(eq(skins.nickname, nick));
 
-  const result: Record<string, string> = {};
+  const result: Record<string, { skin: string; lengan: string }> = {};
+
   for (const item of data) {
-    if (!item.nickname || !item.jenis_skin || !item.skin) continue;
-    result[item.jenis_skin] = item.skin;
+    if (!item.nickname || !item.jenis_skin || !item.skin || !item.lengan) continue;
+
+    result[item.jenis_skin] = {
+      skin: item.skin,
+      lengan: item.lengan,
+    };
   }
 
   return NextResponse.json(result);

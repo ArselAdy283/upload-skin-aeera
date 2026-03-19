@@ -10,8 +10,9 @@ export async function POST(req: Request) {
         const file = data.get("file") as File;
         const jenis = data.get("jenis") as string;
         const nickname = data.get("nickname") as string;
+        const lengan = data.get("lengan") as string;
 
-        if (!file || !nickname || !jenis) {
+        if (!file || !nickname || !jenis || !lengan) {
             return NextResponse.json(
                 { error: "Data tidak lengkap" },
                 { status: 400 }
@@ -47,10 +48,11 @@ export async function POST(req: Request) {
             nickname: safeNickname,
             jenis_skin: jenis,
             skin: fileUrl,
+            lengan: lengan
         }).onDuplicateKeyUpdate({
             set: {
                 skin: fileUrl,
-            },
+            }
         });
 
         return NextResponse.json({

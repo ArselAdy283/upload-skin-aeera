@@ -9,7 +9,7 @@ export async function GET() {
     const grouped: any = {};
 
     data.forEach((item) => {
-      if (!item.nickname || !item.jenis_skin) return;
+      if (!item.nickname || !item.jenis_skin || !item.lengan) return;
 
       if (!grouped[item.nickname]) {
         grouped[item.nickname] = {
@@ -18,7 +18,10 @@ export async function GET() {
         };
       }
 
-      grouped[item.nickname].skins[item.jenis_skin] = item.skin;
+      grouped[item.nickname].skins[item.jenis_skin] = {
+        skin: item.skin,
+        lengan: item.lengan,
+      };
     });
 
     return NextResponse.json(Object.values(grouped));

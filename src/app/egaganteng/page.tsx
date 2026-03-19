@@ -7,6 +7,7 @@ type SkinItem = {
   nickname: string;
   jenis_skin: string;
   skin: string;
+  lengan: string;
 };
 
 export default function SkinsCRUD() {
@@ -14,6 +15,7 @@ export default function SkinsCRUD() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [nicknameEdit, setNicknameEdit] = useState("");
   const [jenisEdit, setJenisEdit] = useState("");
+  const [lenganEdit, setLenganEdit] = useState("");
 
   // fetch data
   const fetchData = async () => {
@@ -38,6 +40,7 @@ export default function SkinsCRUD() {
     setEditingId(item.id);
     setNicknameEdit(item.nickname);
     setJenisEdit(item.jenis_skin);
+    setLenganEdit(item.lengan);
   };
 
   const saveEdit = async () => {
@@ -49,6 +52,7 @@ export default function SkinsCRUD() {
         id: editingId,
         nickname: nicknameEdit,
         jenis_skin: jenisEdit,
+        lengan: lenganEdit,
       }),
     });
     setEditingId(null);
@@ -64,6 +68,7 @@ export default function SkinsCRUD() {
             <th className="p-3 border-b border-white/10">ID</th>
             <th className="p-3 border-b border-white/10">Nickname</th>
             <th className="p-3 border-b border-white/10">Jenis Skin</th>
+            <th className="p-3 border-b border-white/10">Lengan</th>
             <th className="p-3 border-b border-white/10">Preview</th>
             <th className="p-3 border-b border-white/10">Aksi</th>
           </tr>
@@ -92,6 +97,17 @@ export default function SkinsCRUD() {
                   />
                 ) : (
                   item.jenis_skin
+                )}
+              </td>
+              <td className="p-3 border-b border-white/10">
+                {editingId === item.id ? (
+                  <input
+                    value={lenganEdit}
+                    onChange={(e) => setLenganEdit(e.target.value)}
+                    className="text-white p-1 rounded"
+                  />
+                ) : (
+                  item.lengan
                 )}
               </td>
               <td className="p-3 border-b border-white/10">

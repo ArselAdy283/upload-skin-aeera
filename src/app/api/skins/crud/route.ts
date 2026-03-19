@@ -35,9 +35,9 @@ export async function DELETE(req: Request) {
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
-    const { id, nickname, jenis_skin } = body;
+    const { id, nickname, jenis_skin, lengan } = body;
 
-    if (!id || (!nickname && !jenis_skin))
+    if (!id || (!nickname || !jenis_skin || !lengan))
       return NextResponse.json({ error: "Data tidak lengkap" }, { status: 400 });
 
     await db
@@ -45,6 +45,7 @@ export async function PUT(req: Request) {
       .set({
         nickname: nickname ?? undefined,
         jenis_skin: jenis_skin ?? undefined,
+        lengan: lengan ?? undefined
       })
       .where(eq(skins.id, id));
 

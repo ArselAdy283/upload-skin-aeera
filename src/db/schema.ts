@@ -5,4 +5,5 @@ export const skins = mysqlTable("skins", {
   nickname: varchar("nickname", { length: 100 }),
   jenis_skin: varchar("jenis_skin", { length: 50 }),
   skin: varchar("skin", { length: 255 }),
+  lengan: varchar("lengan", { length: 255 })
 });

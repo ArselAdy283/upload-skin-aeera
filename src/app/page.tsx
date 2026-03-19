@@ -10,6 +10,7 @@ export default function HomePage() {
   const [nickname, setNickname] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
   const [jenis, setJenis] = useState("Baju Pribadi");
+  const [lengan, setLengan] = useState("classic");
   const [preview, setPreview] = useState<string | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<string>("https://crafthead.net/avatar/steve");
 
@@ -49,6 +50,7 @@ export default function HomePage() {
     formData.append("file", file);
     formData.append("jenis", jenis);
     formData.append("nickname", nickname);
+    formData.append("lengan", lengan)
 
     const res = await fetch("/api/upload", {
       method: "POST",
@@ -142,6 +144,7 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
+
             {/* jenis skin */}
             <label className="block text-sm font-medium text-slate-400 mb-1">jenis skin</label>
             <label className="block text-sm text-slate-500 mb-2">(kalo akun premium ga perlu baju pribadi)</label>
@@ -152,6 +155,17 @@ export default function HomePage() {
               <option>Baju Pribadi</option>
               <option>Baju Sekolah</option>
             </select>
+
+            {/* lengan */}
+            <label className="block text-sm font-medium text-slate-400 mb-2">jenis lengan</label>
+            <select
+              onChange={(e) => setJenis(e.target.value)}
+              className="w-full bg-slate-950 border border-white/10 rounded-xl py-3 pl-4 pr-4"
+            >
+              <option value="classic">Classic (Steve)</option>
+              <option value="slim">Slim (Alex)</option>
+            </select>
+
             {/* Input File */}
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-2">File Skin (.png)</label>
