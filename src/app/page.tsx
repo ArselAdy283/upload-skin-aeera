@@ -70,12 +70,8 @@ export default function HomePage() {
       alert("Upload gagal: " + (data?.error || "unknown"));
       return;
     }
-
-  // berhasil
-    alert("Upload berhasil!");
     setPreview(data.path);
 
-    // optional reset
     setNickname("");
     setRefreshKey(prev => prev + 1);
   };
