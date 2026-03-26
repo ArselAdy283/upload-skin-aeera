@@ -1,5 +1,5 @@
 import { db } from "@/db";
-import { skins } from "@/db/schema";
+import { skins, jenis_baju } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
@@ -11,14 +11,23 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Nickname wajib" }, { status: 400 });
   }
 
-  const data = await db.select().from(skins).where(eq(skins.nickname, nick));
+  const data = await db
+    .select({
+      skin: skins.skin,
+      lengan: skins.lengan,
+      jenis_baju_nama: jenis_baju.jenis_baju,
+    })
+    .from(skins)
+    .leftJoin(jenis_baju, eq(skins.jenis_baju_id, jenis_baju.id))
+    .where(eq(skins.nickname, nick));
 
   const result: Record<string, { skin: string; lengan: string }> = {};
 
   for (const item of data) {
-    if (!item.nickname || !item.jenis_skin || !item.skin || !item.lengan) continue;
+    if (!item.jenis_baju_nama || !item.skin || !item.lengan) continue;
 
-    result[item.jenis_skin] = {
+    // 🔥 sekarang pakai nama, bukan ID
+    result[item.jenis_baju_nama] = {
       skin: item.skin,
       lengan: item.lengan,
     };

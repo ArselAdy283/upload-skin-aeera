@@ -1,9 +1,40 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "ce3f13fc-b2b5-4f19-a9fc-7db06061b82b",
+  "id": "7faea411-3bda-408c-b4e3-e02c1bd57d77",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "jenis_baju": {
+      "name": "jenis_baju",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "jenis_baju": {
+          "name": "jenis_baju",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "jenis_baju_id": {
+          "name": "jenis_baju_id",
+          "columns": [
+            "id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
     "skins": {
       "name": "skins",
       "columns": {
@@ -21,11 +52,11 @@
           "notNull": false,
           "autoincrement": false
         },
-        "jenis_skin": {
-          "name": "jenis_skin",
-          "type": "varchar(50)",
+        "jenis_baju_id": {
+          "name": "jenis_baju_id",
+          "type": "int",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "skin": {
@@ -44,7 +75,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "skins_jenis_baju_id_jenis_baju_id_fk": {
+          "name": "skins_jenis_baju_id_jenis_baju_id_fk",
+          "tableFrom": "skins",
+          "tableTo": "jenis_baju",
+          "columnsFrom": [
+            "jenis_baju_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {
         "skins_id": {
           "name": "skins_id",

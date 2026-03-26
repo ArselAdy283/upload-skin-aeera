@@ -1,15 +1,24 @@
 import { db } from "@/db";
-import { skins } from "@/db/schema";
+import { skins, jenis_baju } from "@/db/schema";
 import { NextResponse } from "next/server";
+import { eq } from "drizzle-orm";
 
 export async function GET() {
   try {
-    const data = await db.select().from(skins);
+    const data = await db
+      .select({
+        nickname: skins.nickname,
+        skin: skins.skin,
+        lengan: skins.lengan,
+        jenis_baju_nama: jenis_baju.jenis_baju,
+      })
+      .from(skins)
+      .leftJoin(jenis_baju, eq(skins.jenis_baju_id, jenis_baju.id));
 
     const grouped: any = {};
 
     data.forEach((item) => {
-      if (!item.nickname || !item.jenis_skin || !item.lengan) return;
+      if (!item.nickname || !item.jenis_baju_nama || !item.lengan) return;
 
       if (!grouped[item.nickname]) {
         grouped[item.nickname] = {
@@ -18,7 +27,8 @@ export async function GET() {
         };
       }
 
-      grouped[item.nickname].skins[item.jenis_skin] = {
+      // 🔥 pakai nama dari JOIN
+      grouped[item.nickname].skins[item.jenis_baju_nama] = {
         skin: item.skin,
         lengan: item.lengan,
       };

@@ -9,14 +9,32 @@ import KumpulanSkin from "@/components/KumpulanSkin";
 export default function HomePage() {
   const [nickname, setNickname] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
-  const [jenis, setJenis] = useState("Baju Pribadi");
+
+  const [jenis, setJenis] = useState("");
+  const [jenisList, setJenisList] = useState<{ id: number; jenis_baju: string }[]>([]);
+
   const [lengan, setLengan] = useState("classic");
   const [preview, setPreview] = useState<string | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<string>("https://crafthead.net/avatar/steve");
 
+  // 🔥 ambil jenis baju dari DB
+  useEffect(() => {
+    fetch("/api/skins/jenis_baju")
+      .then((res) => res.json())
+      .then((data) => {
+        setJenisList(data);
+
+        // set default otomatis
+        if (data.length > 0) {
+          setJenis(data[0].jenis_baju);
+        }
+      })
+      .catch(console.error);
+  }, []);
+
+  // avatar preview
   useEffect(() => {
     if (nickname.trim().length > 0) {
-
       setAvatarUrl(`https://crafthead.net/helm/${nickname}`);
     } else {
       setAvatarUrl("https://crafthead.net/helm/steve");
@@ -50,7 +68,7 @@ export default function HomePage() {
     formData.append("file", file);
     formData.append("jenis", jenis);
     formData.append("nickname", nickname);
-    formData.append("lengan", lengan)
+    formData.append("lengan", lengan);
 
     const res = await fetch("/api/upload", {
       method: "POST",
@@ -70,10 +88,10 @@ export default function HomePage() {
       alert("Upload gagal: " + (data?.error || "unknown"));
       return;
     }
-    setPreview(data.path);
 
+    setPreview(data.path);
     setNickname("");
-    setRefreshKey(prev => prev + 1);
+    setRefreshKey((prev) => prev + 1);
   };
 
   const handleDrop = (e: any) => {
@@ -113,11 +131,10 @@ export default function HomePage() {
           </h2>
 
           <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* Input Nickname dengan Kepala Skin */}
+            {/* Nickname */}
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-2">Nickname In-Game</label>
               <div className="flex gap-3">
-                {/* Avatar Preview */}
                 <div className="shrink-0 w-12 h-12 overflow-hidden flex items-center justify-center shadow-inner">
                   <img
                     src={avatarUrl}
@@ -141,20 +158,25 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* jenis skin */}
-            <label className="block text-sm font-medium text-slate-400 mb-1">jenis skin</label>
+            {/* jenis baju (DINAMIS) */}
+            <label className="block text-sm font-medium text-slate-400 mb-1">jenis baju</label>
             <label className="block text-sm text-slate-500 mb-2">(kalo akun premium ga perlu baju pribadi)</label>
             <select
+              value={jenis}
               onChange={(e) => setJenis(e.target.value)}
               className="w-full bg-slate-950 border border-white/10 rounded-xl py-3 pl-4 pr-4"
             >
-              <option>Baju Pribadi</option>
-              <option>Baju Sekolah</option>
+              {jenisList.map((j) => (
+                <option key={j.id} value={j.jenis_baju}>
+                  {j.jenis_baju}
+                </option>
+              ))}
             </select>
 
             {/* lengan */}
             <label className="block text-sm font-medium text-slate-400 mb-2">jenis lengan</label>
             <select
+              value={lengan}
               onChange={(e) => setLengan(e.target.value)}
               className="w-full bg-slate-950 border border-white/10 rounded-xl py-3 pl-4 pr-4"
             >
@@ -162,7 +184,7 @@ export default function HomePage() {
               <option value="slim">Slim (Alex)</option>
             </select>
 
-            {/* Input File */}
+            {/* upload */}
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-2">File Skin (.png)</label>
               <label
@@ -178,7 +200,7 @@ export default function HomePage() {
               </label>
             </div>
 
-            {/* Preview Section */}
+            {/* preview */}
             {preview && (
               <div className="mt-4 p-4 bg-slate-950 rounded-xl border border-white/5 flex flex-col items-center">
                 <p className="text-xs text-slate-500 mb-3 uppercase tracking-widest">Preview Skin</p>
@@ -195,8 +217,8 @@ export default function HomePage() {
           </form>
         </div>
       </section>
-      <KumpulanSkin refreshKey={refreshKey} />
 
+      <KumpulanSkin refreshKey={refreshKey} />
       <Footer />
     </main>
   );
