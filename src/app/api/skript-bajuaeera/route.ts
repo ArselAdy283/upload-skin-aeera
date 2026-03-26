@@ -11,6 +11,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Nickname wajib" }, { status: 400 });
   }
 
+  // Fetch skin milik user
   const data = await db
     .select({
       skin: skins.skin,
@@ -21,17 +22,24 @@ export async function GET(req: Request) {
     .leftJoin(jenis_baju, eq(skins.jenis_baju_id, jenis_baju.id))
     .where(eq(skins.nickname, nick));
 
+  // Fetch semua jenis baju yang tersedia
+  const allJenis = await db
+    .select({ nama: jenis_baju.jenis_baju })
+    .from(jenis_baju);
+
   const result: Record<string, { skin: string; lengan: string }> = {};
 
   for (const item of data) {
     if (!item.jenis_baju_nama || !item.skin || !item.lengan) continue;
 
-    // 🔥 sekarang pakai nama, bukan ID
     result[item.jenis_baju_nama] = {
       skin: item.skin,
       lengan: item.lengan,
     };
   }
 
-  return NextResponse.json(result);
+  return NextResponse.json({
+    available_types: allJenis.map((j) => j.nama),
+    ...result,
+  });
 }

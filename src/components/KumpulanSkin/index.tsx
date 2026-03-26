@@ -100,7 +100,7 @@ const KumpulanSkin = ({ refreshKey }: { refreshKey: number }) => {
             {sortedImages.map(([jenis, items]) => (
                 <div key={jenis}>
                     {/* Judul kategori */}
-                    <h1 className="text-3xl font-bold my-10 text-center">
+                    <h1 className="text-3xl font-bold my-10 text-center mt-30">
                         {jenis}
                     </h1>
 
