@@ -2,16 +2,18 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+First, create a `.env` file in the root directory:
+```
+DATABASE_URL=
+CLOUDINARY_URL=
+```
+You can get your Cloudinary URL from <a href="https://cloudinary.com/">cloudinary.com</a>
+
+Then, run the commands:
 
 ```bash
+npm i
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
